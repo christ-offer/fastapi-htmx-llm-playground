@@ -1,0 +1,19 @@
+<html>
+  {% for message in conversation %}
+    {% if message.role == "user" %}
+    <div class="message message-user">
+      <p class="icon">🧔</p> 
+      <div class="message-content">
+        {{ message.content | safe }}
+      </div>
+    </div>
+    {% else %}
+    <div class="message message-bot">
+      <p class="icon">🤖</p>
+      <div class="message-content">
+        {{ message.content | safe }}
+      </div>
+    </div>
+    {% endif %}
+  {% endfor %}
+</html>

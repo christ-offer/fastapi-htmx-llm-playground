@@ -1,0 +1,14 @@
+openai
+ttkthemes
+requests
+bs4
+markdown
+pandas
+torch
+tkhtmlview
+open_clip_torch
+PIL
+pandas
+python-dotenv
+pinecone-client
+tiktoken

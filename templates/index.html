@@ -1,0 +1,174 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="/static/code.css">
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://unpkg.com/htmx.org@1.9.3"></script>
+    <title>Chatbot</title>
+  </head>
+  <body>
+    <nav>
+      <header>
+        <button hx-get="/new_chat" hx-get="" hx-target=".chat-history" hx-swap="innerHTML">New Chat</button>
+      </header>
+      <main>
+        <h4>Chat History</h4>
+        <ul class="history" name="get_history" hx-get="/get_history" hx-trigger="load" hx-target=".history" hx-swap="innerHTML">
+          
+        </ul>
+      </main>
+    </nav>
+    <section>
+      <div class="chat-history">
+        <p>Start a new Chat from the sidebar</p>
+      </div>
+      <div class="input-area">
+        <div class="input-container">
+          <textarea id="chat" name="chat" hx-post="/run_convo" hx-swap="beforeend" hx-target=".chat-history" hx-trigger="keyup.enter" placeholder="Please enter your prompt here"></textarea>  
+        </div>
+      </div>
+    </section>
+    <aside>
+      <h3>Settings</h3>
+      <p>Enter a message in the input box and click send. The bot will respond with a message.</p>
+    </aside>
+  </body>
+  <script>
+    window.addEventListener('htmx:afterRequest', function(event) {
+      if (event.detail.elt.tagName === 'BUTTON') {
+        htmx.ajax('GET', '/get_history', {target:'.history', swap:'innerHTML'})
+      }
+    });
+    window.addEventListener('htmx:beforeRequest', function(event) {
+      if (event.detail.elt.tagName === 'TEXTAREA') {
+        event.detail.elt.disabled = true;
+      }
+    });
+
+    window.addEventListener('htmx:afterOnLoad', function(event) {
+      if (event.detail.elt.tagName === 'TEXTAREA') {
+        var textarea = event.detail.elt;
+        textarea.value = '';
+        textarea.disabled = false;
+      }
+    });
+    // Handler for textarea keypresses
+    document.getElementById('chat').addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault(); // Prevent newline
+        htmx.trigger(this, 'keyup.enter'); // Trigger htmx request
+      }
+    });
+  </script>
+</html>
+<style>
+body {
+  display: grid;
+  grid-template-columns: 1fr 4fr 2fr;
+  height: 100%;
+  max-height: 100vh;
+  overflow-y: hidden;
+}
+nav {
+  background-color: var(--background-secondary);
+  padding: 1rem;
+}
+nav header {
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 1rem;
+}
+nav main h4 {
+  text-align: center;
+  padding-bottom: 1rem;
+}
+nav ul {
+  list-style: none;
+  padding: 0;
+}
+nav ul li {
+  padding: 0.5rem;
+  margin: 0.5rem;
+  background-color: var(--background-tertiary);
+  border-radius: 5px;
+}
+.load_history_button {
+  font-size: 12px;
+  padding: 0;
+  display:flex;
+  justify-content: space-between;
+}
+.load_history_button p {
+  cursor: pointer;
+  padding: 0.5rem;
+}
+.load_history_button span {
+  cursor: pointer;
+  padding: 0.5rem;
+  background-color: var(--background-tertiary);
+  border-radius: 5px;
+  border: 1px solid var(--background-tertiary);
+}
+nav button {
+  padding: 0.5rem;
+  margin: 0.5rem;
+  margin-inline: auto;
+  border-radius: 5px;
+  border: 1px solid var(--background-tertiary);
+
+}
+section {
+  display: grid;
+  grid-template-rows: 1fr 100px;
+}
+aside {
+  background-color: var(--background-secondary);
+  padding: 1rem;
+}
+.chat-history {
+  padding: 1rem;
+  max-height: calc(100vh - 125px);
+  overflow-y: scroll;
+}
+.message {
+  margin-bottom: 10px;
+  display: flex;
+}
+.message b {
+  font-weight: bold;
+  
+}
+.message-content {
+  max-width: 77ch;
+  flex-grow: 1;
+  padding: 1rem;
+  border-radius: 5px;
+  background-color: var(--background-tertiary);
+}
+.message-content ul, .message-content ol {
+  margin-left: 1rem;
+  margin-block: 0.5rem;
+}
+.message-content li {
+  margin-left: 0.25rem;
+}
+.icon {
+  font-size: 24px;
+  padding: 1rem;
+}
+.message-bot {
+  position: relative;
+}
+.message-user {
+  position: relative;
+  flex-direction: row-reverse;
+  text-align: right;
+}
+.input-area {
+  display: flex;
+  padding: 1rem;
+}
+.input-container {
+  margin: auto;
+}
+</style>

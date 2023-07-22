@@ -1,0 +1,77 @@
+:root {
+  --background-primary: #1d2021;
+  --background-secondary: #282828;
+  --background-tertiary: #3c3836;
+  --accent-primary: #d5c4a1;
+  --accent-secondary: #ebdbb2;
+  --text-primary: #fbf1c7;
+  --text-secondary: #d5c4a1;
+  --text-link: #b8bb26;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--background-primary);
+}
+
+button {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--background-tertiary);
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--background-secondary);
+}
+
+a {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-link);
+  text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+p {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+input, textarea {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  border: 1px solid var(--accent-primary);
+  background-color: var(--background-tertiary);
+  padding: 0.5rem;
+  border-radius: 5px;
+  margin: auto;
+  max-width: 70ch;
+  width: 70ch;
+}
+
+textarea:active, textarea:focus {
+  outline: none;
+  border: 2px solid var(--accent-primary);
+}
