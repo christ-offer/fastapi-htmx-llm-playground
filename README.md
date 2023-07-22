@@ -1,6 +1,4 @@
-# GPT-Assistant(GUI)
-
-_Your friendly neighborhood GTK GUI chatbot, now with bells and whistles (functions)._
+# FastAPI / HTMX Chatbot
 
 ## Table of Contents
 
