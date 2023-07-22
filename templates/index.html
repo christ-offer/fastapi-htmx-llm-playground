@@ -13,13 +13,14 @@
       <main>
         <h4>Chat History</h4>
         <ul class="history" name="get_history" hx-get="/get_history" hx-trigger="load" hx-target=".history" hx-swap="innerHTML">
-          
         </ul>
       </main>
     </nav>
     <section>
       <div class="chat-history">
-        <p>Start a new Chat from the sidebar</p>
+        <div class="empty-chat-container">
+          <p>Start a new Chat or load a previous one from the sidebar</p>
+        </div>
       </div>
       <div class="input-area">
         <div class="input-container">
@@ -51,6 +52,31 @@
         textarea.disabled = false;
       }
     });
+    
+    var textarea = document.getElementById('chat');
+
+    // Initialize the textarea as disabled
+    textarea.disabled = true;
+
+    // Create a new MutationObserver instance
+    var observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.addedNodes) {
+          mutation.addedNodes.forEach(function(node) {
+            if (node.nodeType === 1) { // ELEMENT_NODE
+              if (node.classList.contains('message')) {
+                textarea.disabled = false;
+                observer.disconnect(); // stop observing when we've found the element
+              }
+            }
+          });
+        }
+      });
+    });
+
+    // Start observing the document with the configured parameters
+    observer.observe(document.body, { childList: true, subtree: true });
+    
     // Handler for textarea keypresses
     document.getElementById('chat').addEventListener('keydown', function(event) {
       if (event.key === 'Enter' && !event.shiftKey) {
@@ -120,6 +146,18 @@ nav button {
 section {
   display: grid;
   grid-template-rows: 1fr 100px;
+}
+.empty-chat-container {
+  height: 100%;
+  display: grid;
+  place-items: center;
+ 
+}
+.empty-chat-container p {
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--text-secondary);
 }
 aside {
   background-color: var(--background-secondary);
