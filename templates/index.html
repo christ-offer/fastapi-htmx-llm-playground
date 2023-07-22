@@ -19,8 +19,9 @@
     <section>
       <div class="chat-history">
         <div class="empty-chat-container">
-          <p>Start a new Chat or load a previous one from the sidebar</p>
+          <p>Start a new chat by clicking the button above.</p>
         </div>
+        
       </div>
       <div class="input-area">
         <div class="input-container">
@@ -33,8 +34,10 @@
       </div>
     </section>
     <aside>
-      <h3>Settings</h3>
-      <p>Enter a message in the input box and click send. The bot will respond with a message.</p>
+      <h2>Usage:</h2>
+      <div hx-get="/settings" class="settings" hx-target=".settings" hx-trigger="load" hx-swap="innerHTML">
+        
+      </div>
     </aside>
   </body>
   <script>
@@ -213,6 +216,18 @@ aside {
 .input-container {
   margin: auto;
   position: relative;
+}
+aside .settings {
+  margin-top: 2rem;
+  padding-inline: 1rem;
+}
+aside ul {
+  
+  margin-left: 1rem;
+  padding-block: 1rem;
+}
+aside li {
+  margin-left: 0.25rem;
 }
 .htmx-indicator{
     position:absolute;

@@ -205,3 +205,23 @@ The file number range should always be provided as [start_line, end_line], even 
 When providing your suggestions, ensure you specify the exact lines that need to be changed. Mistakes in line references can lead to confusion or incorrect changes. 
 Detailed explanations of the changes and clear reasoning behind them are also required to facilitate understanding of your suggestions.
 """
+
+help_agent = """### Available commands:
+* /help
+* /csv - csv handler
+* /python - python interpreter
+* /kb - knowledge base handler
+* /history - history handler
+* /write - file writer
+* /read - file reader
+* /edit - file editor
+* /wikidata - wikidata sparql handler
+* /image - image to text captioner
+* /scrape - web scraper
+* /review - performs a review of code following a strict response format
+* /brainstorm [n] - returns a list of n ideas for the topic following a strict response format
+* /write_spec - Writes a spec for the brainstorm n following a strict response format
+* /ticket - creates a ticket for the brainstorm/spec following a strict response format
+* /write_tests - writes tests for the ticket / file from ticket
+* /write_code - writes code for the ticket / file from ticket
+"""

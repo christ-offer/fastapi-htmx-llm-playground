@@ -44,5 +44,4 @@ def function_response_agent(
     except openai.error.RateLimitError as e:
         print(f"OpenAI API request exceeded rate limit: {e}")
         return "Requests exceed OpenAI rate limit." + function_response
-
-    return response["choices"][0]["message"]
+    return response

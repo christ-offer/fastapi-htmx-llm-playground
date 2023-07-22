@@ -9,6 +9,7 @@ class AnthropicAgent:
             prompt: str = "",
             model: str = "claude-2",
             conversation: dict = [],
+            stream: bool = False,
             max_tokens_to_sample: int = 1000000):
             
         self.model = model
@@ -42,14 +43,15 @@ class AnthropicAgent:
     def prompt(self, value):
         self._prompt = value
 
-    def call(self, prompt: str = "", model: str = "claude-2", max_tokens_to_sample: int = 1000000, conversation: dict = []):
+    def call(self, prompt: str = "", model: str = "claude-2", stream: bool = True, max_tokens_to_sample: int = 1000000, conversation: dict = []):
         try:
             completion = self.anthropic.completions.create(
                 model=model,
                 max_tokens_to_sample=max_tokens_to_sample,
+                stream=stream,
                 prompt=f"Conversation history: {conversation} - {HUMAN_PROMPT} {prompt} {AI_PROMPT}",
             )
-            return completion.completion
+            return completion
         except Exception as e:
             logging.error(f"Anthropic API call failed: {str(e)}")
             return "Anthropic API call failed due to an internal server error."

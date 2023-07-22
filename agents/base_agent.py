@@ -81,7 +81,7 @@ class RegularAgent:
             model: str = "gpt-4-0613",
             temperature: float = 0.6,
             top_p: float = 1.0,
-            stream: bool = False,
+            stream: bool = True,
             frequency_penalty: float = 0.0,
             presence_penalty: float = 0.0):
             
@@ -99,6 +99,7 @@ class RegularAgent:
                 ],
                 stream=stream,
             )
+            
             #print('streaming response')
             #collected_chunks = []
             #collected_messages = []
@@ -126,4 +127,4 @@ class RegularAgent:
         except openai.error.RateLimitError as e:
             print(f"OpenAI API request exceeded rate limit: {e}")
             return "Requests exceed OpenAI rate limit.", conversation
-        return response["choices"][0]["message"], conversation
+        return response
