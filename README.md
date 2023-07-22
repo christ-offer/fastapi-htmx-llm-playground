@@ -5,8 +5,6 @@ _Your friendly neighborhood GTK GUI chatbot, now with bells and whistles (functi
 ## Table of Contents
 
 - [Description](#description)
-  - [Limitations](#limitations)
-  - [TODO](#todo--wants--would-if-i-could)
 - [Functions](#functions)
 - [Usage](#usage)
 - [Screenshots](#gui-screenshots)
@@ -19,28 +17,12 @@ _Your friendly neighborhood GTK GUI chatbot, now with bells and whistles (functi
 
 ## Description
 
-Chatbot built with TKinter GUI and a bunch of functions.
+Chatbot built using Python - Served with FastAPI and HTMX
 
 * History is in practice in memory. (save to file with /save)
-* File manager - View saved files, load text files into the chat.
-* Has tiktoken calculation for total tokens/cost for both the input field and the total conversation.
 * Requires usage of /commands to save on tokens from system messages and function params. /commands send the message to different agents based on the command with their specific system message and function params.
-
-### Limitations
-
-* Pretty basic GUI - Not threaded, so it freezes when the bot is thinking.
-* Can not copy from the chat window. (Workaround, ask it to write to file)
-* I don't know python.
-* Probably many more.
-
-### TODO / Wants / Would if I could
-
-- [ ] Integration with Vector DB (A tab for it in the UI with upload/search/embed/etc)
-- [x] Settings tab for configuring the parameters of the different agents (somewhat done)
-- [ ] Streamed responses live updated in UI. Not sure how to get around threading (or how to do it generally), especially for running python code.
-- [x] Refactor the UI code to be more modular and less spaghetti (somewhat done, tabs are seperated to their own files)
-- [x] Token counter / Cost counter
-- [ ] Probably more
+* The UI is regular HTML but with HTMX for the dynamic parts.
+* Has both OpenAI and Anthropic models available
 
 ## Functions
 
@@ -55,6 +37,7 @@ Chatbot built with TKinter GUI and a bunch of functions.
 * /wikidata - wikidata sparql handler
 * /image - image to text captioner
 * /scrape - web scraper 
+* /claude - Use anthropics model (100k token window)
 * /save 'filename' - saves entire conversation history to file in history folder
 
 ### Coding Assistant commands
@@ -76,32 +59,13 @@ Example Usecase: /read_file code.ts/py/rs/etc -> /review -> /edit_file code.ts/p
 * Create a .env file in the root of the project:
   - OPENAI_API_KEY=your-api-key
   - PINECONE_API_KEY=your-api-key
+  - ANTHROPIC_API_KEY=your-api-key
   - PINECONE_ENVIRONMENT=your-environment
 * `pip install -r requirements.txt` to install dependencies
 * `python main.py` to run the chatbot
 
 
-## GUI Screenshots
+## Screenshots
 
-### Chat UI (With token and cost counters)
-![GUI with Token Count](screenshots/guui.png)
-
-### File-Manager
-![Alt text](screenshots/filemanager.png)
-
-### Settings Tab
-![Settings tab](screenshots/setting.png)
-
-### Read CSV and Use Python to plot (older GUI)
-![Read CSV and Use Python to plot](screenshots/image-2.png)
-
-### Development Flow demo:
-
-#### Brainstorm
-![Brainstorming](screenshots/brainstorm.png)
-
-#### Write Spec
-![Spec writing](screenshots/specwriting.png)
-
-#### Create Ticket
-![Create ticket](screenshots/ticket.png)
+### Chat UI
+![UI With Syntax Highlighting](screenshots/ui.png)
