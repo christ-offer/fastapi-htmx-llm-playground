@@ -50,9 +50,9 @@ def run_conversation(prompt: str, conversation: List[Dict[str, str]]) -> Tuple[s
     command = get_command(prompt)
     if command in agents:
         agent_properties = agents[command]
-        print(agent_properties["name"])
         prompt = prompt[agent_properties["command_length"]:].strip()
         if agent_properties["is_function"]:
+            print(agent_properties["name"])
             response = function_call_agent(
                 prompt=prompt,
                 conversation=conversation,
@@ -69,6 +69,26 @@ def run_conversation(prompt: str, conversation: List[Dict[str, str]]) -> Tuple[s
             cost = calculate_cost(tokens, model=model)
             token_count += tokens
             conversation_cost += cost
+        
+        else:
+            print(agent_properties["name"])
+            response = regular_agent(
+                prompt=prompt,
+                conversation=conversation,
+                system_message=agent_properties["system_message"],
+            )
+            message = response[0]
+            model = "gpt-4-0613"
+            tokens = num_tokens_from_messages(message, model=model)
+            cost = calculate_cost(tokens, model=model)
+            token_count += tokens
+            conversation_cost += cost
+            conversation.append({
+                "role": "assistant",
+                "content": message["content"],
+            })
+            return message["content"], conversation, token_count, conversation_cost
+        
     elif command == "/claude":
         print('Anthropic')
         prompt = prompt[len(command):].strip()
@@ -93,8 +113,8 @@ def run_conversation(prompt: str, conversation: List[Dict[str, str]]) -> Tuple[s
         model = "gpt-4-0613"
         tokens = num_tokens_from_messages(message, model=model)
         cost = calculate_cost(tokens, model=model)
-        token_count = 10 #+= tokens
-        conversation_cost = 12 #+= cost
+        token_count += tokens
+        conversation_cost += cost
         conversation.append({
             "role": "assistant",
             "content": message["content"],

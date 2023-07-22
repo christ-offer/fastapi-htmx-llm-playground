@@ -7,6 +7,10 @@
   --text-primary: #fbf1c7;
   --text-secondary: #d5c4a1;
   --text-link: #b8bb26;
+  --error: #fb4934;
+  --warning: #fabd2f;
+  --blue: #83a598;
+  --purle: #d3869b;
 }
 * {
   box-sizing: border-box;

@@ -9,7 +9,7 @@ from typing import List, Dict, Tuple
 from pydantic import BaseModel
 from markdown import markdown
 
-app = FastAPI()
+app = FastAPI(docs_url="/documentation", redoc_url=None)
 
 class RunConvoForm(BaseModel):
     chat: str

@@ -8,7 +8,7 @@
   <body>
     <nav>
       <header>
-        <button hx-get="/new_chat" hx-get="" hx-target=".chat-history" hx-swap="innerHTML">New Chat</button>
+        <button hx-get="/new_chat" hx-target=".chat-history" hx-swap="innerHTML">New Chat</button>
       </header>
       <main>
         <h4>Chat History</h4>
@@ -24,7 +24,11 @@
       </div>
       <div class="input-area">
         <div class="input-container">
-          <textarea id="chat" name="chat" hx-post="/run_convo" hx-swap="beforeend" hx-target=".chat-history" hx-trigger="keyup.enter" placeholder="Please enter your prompt here"></textarea>  
+          <div id="spinner" class="htmx-indicator" src="spinner.svg">
+            Loading...
+          </div>
+          <textarea id="chat" name="chat" hx-post="/run_convo" hx-swap="beforeend" hx-target=".chat-history" hx-indicator="#spinner" hx-trigger="keyup.enter" placeholder="Please enter your prompt here"></textarea>  
+          
         </div>
       </div>
     </section>
@@ -130,10 +134,9 @@ nav ul li {
 }
 .load_history_button span {
   cursor: pointer;
+  color: var(--error);
+  font-size: 16px;
   padding: 0.5rem;
-  background-color: var(--background-tertiary);
-  border-radius: 5px;
-  border: 1px solid var(--background-tertiary);
 }
 nav button {
   padding: 0.5rem;
@@ -157,6 +160,7 @@ section {
   text-align: center;
   font-weight: 700;
   font-size: 1.5rem;
+  max-width: 33ch;
   color: var(--text-secondary);
 }
 aside {
@@ -208,5 +212,20 @@ aside {
 }
 .input-container {
   margin: auto;
+  position: relative;
+}
+.htmx-indicator{
+    position:absolute;
+    top:10px;
+    right:10px;
+    bottom:0;
+    opacity:0;
+    transition: opacity 300ms ease-in-out;
+}
+.htmx-request .htmx-indicator{
+    opacity:1
+}
+.htmx-request.htmx-indicator{
+    opacity:1
 }
 </style>
