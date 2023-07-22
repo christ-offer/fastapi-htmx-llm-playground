@@ -5,12 +5,7 @@
 - [Description](#description)
 - [Functions](#functions)
 - [Usage](#usage)
-- [Screenshots](#gui-screenshots)
-  - [Chat UI](#chat-ui)
-  - [File-Manager](#file-manager)
-  - [Settings](#settings-tab)
-  - [Read CSV and Plot with Python](#read-csv-and-use-python-to-plot-older-gui)
-  - [Dev Flow](#development-flow-demo)
+- [Screenshots](#screenshots)
 
 
 ## Description
