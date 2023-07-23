@@ -12,6 +12,13 @@ from chatbot.chatbot import run_conversation
 from chatbot.system_messages.system import (
     help_agent,
     )
+#from db.database import (
+#    get_user_conversations,
+#    get_conversation_messages,
+#    create_conversation,
+#    add_message_to_conversation,
+#)
+
 
 app = FastAPI(docs_url="/documentation", redoc_url=None)
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -39,13 +46,15 @@ async def read_settings(request: Request, settings=help_agent):
 @app.get("/get_history", response_class=HTMLResponse)
 async def read_history(request: Request):
     global conversations
+    #convo = get_user_conversations(1)
     return templates.TemplateResponse("chat_history.html", {"request": request, "conversations": conversations})
 
 @app.delete("/delete_history", response_class=HTMLResponse)
 async def delete_conversation(request: Request, name: str = None):
     global conversations
     global conversation
-    
+    #delete_conversation(name)
+    #conversations = get_conversations()
     # Find the conversation with the matching name
     for convo in conversations:
         if convo['name'] == name:
@@ -73,7 +82,6 @@ async def update_conversation(request: Request, name: str = Form(...), new_name:
     global conversations
     global conversation
     query_params = request.query_params
- 
     # Find the conversation with the matching name
     for convo in conversations:
         if convo['name'] == name:
@@ -88,16 +96,23 @@ async def update_conversation(request: Request, name: str = Form(...), new_name:
 async def new_chat(request: Request):
     global conversation
     global conversations
+    
     conversation = [{"role": "assistant", "content": "Hello! I am your Personal Assistant. Type /help to see the available commands and functions. "}]
     conversation_name = f"Conversation {len(conversations) + 1}"
     conversations.append({"name": conversation_name, "conversation": conversation})
+    #create_conversation(1, conversation_name)
+    #add_message_to_conversation(1, 7, "assistant", "Hello! I am your Personal Assistant. Type /help to see the available commands and functions. ")
     return templates.TemplateResponse("new_chat.html", {"request": request, "conversation": conversation})
 
 @app.get("/chat/{name}", response_class=HTMLResponse)
 async def read_conversation(request: Request, name: str = None):
     global conversations
     global conversation
-    print(name)
+    #print(name)
+    #conv = get_conversation_messages(name, 1)
+    #print(conv)
+    #if not conv:
+    #    raise HTTPException(status_code=404, detail="Conversation or messages not found")
     # Find the conversation with the matching name
     for convo in conversations:
         if convo['name'] == name:
@@ -142,11 +157,12 @@ async def run_convo_route(request: Request, chat: str = Form(...)):
         else:
             print(chunk.completion)
             completed_conversation += chunk.completion
-            
+    #add_message_to_conversation(id, "user", chat)      
     conversation.append({
         "role": "user",
         "content": chat,
     })
+    #add_message_to_conversation(id, "assistant", completed_conversation)
     conversation.append({
         "role": "assistant",
         "content": completed_conversation,
