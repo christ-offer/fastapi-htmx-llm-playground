@@ -1,49 +1,34 @@
+import uvicorn
 from fastapi import FastAPI, Form, Request
-from fastapi.responses import HTMLResponse, StreamingResponse, FileResponse
+from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 from starlette.requests import Request
-from sse_starlette.sse import EventSourceResponse
-import asyncio
-import uvicorn
-from chatbot.chatbot import run_conversation
-from typing import List, Dict, Tuple
 from pydantic import BaseModel
+from fastapi import HTTPException
+from starlette.status import HTTP_307_TEMPORARY_REDIRECT
 from markdown import markdown
-import time
-from chatbot.agents.csv_agent import CSVHandler
+from chatbot.chatbot import run_conversation
 from chatbot.system_messages.system import (
-    function_res_agent,
-    base_system_message,
     help_agent,
     )
 
-csv_handler = CSVHandler()
-
-STREAM_DELAY = 0.1  # second
-RETRY_TIMEOUT = 15000  # milisecond
-
 app = FastAPI(docs_url="/documentation", redoc_url=None)
-
-class RunConvoForm(BaseModel):
-    chat: str
-
-# Mount static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
-
-# Initialize Jinja2 templates
 templates = Jinja2Templates(directory="templates")
 
 # Initialize global conversation history
-conversation = [{"role": "assistant", "content": "Hello! I am your Personal Assistant. Type /help to see the available commands and functions. "}]
+conversation = []
 
 # Initialize index of conversations
 conversations = []
 
+class RunConvoForm(BaseModel):
+    chat: str
+
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     global conversation
-    conversation = [{"role": "assistant", "content": "Hello! I am your Personal Assistant. Type /help to see the available commands and functions. "}]
     return FileResponse("static/index.html")
 
 @app.get("/settings", response_class=HTMLResponse)
@@ -55,27 +40,6 @@ async def read_settings(request: Request, settings=help_agent):
 async def read_history(request: Request):
     global conversations
     return templates.TemplateResponse("chat_history.html", {"request": request, "conversations": conversations})
-
-@app.get("/load_history", response_class=HTMLResponse)
-async def read_conversation(request: Request, name: str = None):
-    global conversations
-    global conversation
-    
-    # Find the conversation with the matching name
-    for convo in conversations:
-        if convo['name'] == name:
-            conversation = convo["conversation"]
-            break
-    # Parse the conversation into HTML, turning the content key into html
-    conversation_html = []
-    for message in conversation:
-        if message['role'] == 'assistant':
-            message_html = markdown(message['content'], extensions=['fenced_code', 'codehilite'])
-            conversation_html.append({"role": message['role'], "content": message_html})
-        else:
-            conversation_html.append({"role": message['role'], "content": message['content']})
-            
-    return templates.TemplateResponse("load_history.html", {"request": request, "conversation": conversation_html})
 
 @app.delete("/delete_history", response_class=HTMLResponse)
 async def delete_conversation(request: Request, name: str = None):
@@ -109,13 +73,7 @@ async def update_conversation(request: Request, name: str = Form(...), new_name:
     global conversations
     global conversation
     query_params = request.query_params
-    print(query_params)
-    print(request)
-    
-    print(name)
-    print(new_name)
-    
-    
+ 
     # Find the conversation with the matching name
     for convo in conversations:
         if convo['name'] == name:
@@ -135,17 +93,42 @@ async def new_chat(request: Request):
     conversations.append({"name": conversation_name, "conversation": conversation})
     return templates.TemplateResponse("new_chat.html", {"request": request, "conversation": conversation})
 
+@app.get("/chat/{name}", response_class=HTMLResponse)
+async def read_conversation(request: Request, name: str = None):
+    global conversations
+    global conversation
+    print(name)
+    # Find the conversation with the matching name
+    for convo in conversations:
+        if convo['name'] == name:
+            conversation = convo["conversation"]
+            break
+    else:
+        raise HTTPException(
+            status_code=HTTP_307_TEMPORARY_REDIRECT,
+            detail="Chat does not exist",
+            headers={"Location": "/"},
+        )
+
+    # Parse the conversation into HTML, turning the content key into html
+    conversation_html = []
+    for message in conversation:
+        if message['role'] == 'assistant':
+            message_html = markdown(message['content'], extensions=['fenced_code', 'codehilite'])
+            conversation_html.append({"role": message['role'], "content": message_html})
+        else:
+            conversation_html.append({"role": message['role'], "content": message['content']})
+            
+    return templates.TemplateResponse("chat.html", {"request": request, "conversation": conversation_html})
+
+
 @app.post("/chat", response_class=HTMLResponse)
 async def run_convo_route(request: Request, chat: str = Form(...)):
     global conversation
     global conversations
     
-    result = run_conversation(chat, conversation)
-    global conversation_running 
-    
-    conversation_running = True
+    result = run_conversation(chat, conversation) 
     completed_conversation = ""
-    
     for chunk in result:
         # the chunk can either have the key completion or choices
         if "choices" in chunk:
@@ -159,7 +142,7 @@ async def run_convo_route(request: Request, chat: str = Form(...)):
         else:
             print(chunk.completion)
             completed_conversation += chunk.completion
-    conversation_running = False
+            
     conversation.append({
         "role": "user",
         "content": chat,
@@ -171,6 +154,7 @@ async def run_convo_route(request: Request, chat: str = Form(...)):
 
     result_html = markdown(completed_conversation, extensions=['fenced_code', 'codehilite'])
     return templates.TemplateResponse("conversation.html", {"request": request, "result_html": result_html, "chat": chat})
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

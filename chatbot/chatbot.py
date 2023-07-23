@@ -1,10 +1,7 @@
 import json
-import logging
 from typing import Dict, List, Tuple
 import re
-import time
 
-from chatbot.tokenizer.tokens import calculate_cost, num_tokens_from_messages
 from chatbot.system_messages.system import (
     function_res_agent, 
     base_system_message,
@@ -15,7 +12,6 @@ from chatbot.agents.base_agent import RegularAgent
 from chatbot.agents.function_response_agent import function_response_agent
 from chatbot.agents.anthropic_base import AnthropicAgent
 
-from chatbot.constants import HISTORY_DIR
 function_mapper = FunctionMapper()
 fc = FunctionCallAgent()
 ra = RegularAgent()
@@ -57,7 +53,6 @@ def run_conversation(prompt: str, conversation: List[Dict[str, str]]) -> Tuple[s
                 model=agent_properties["agent"].model,
             )
             message = response[0]
-            
         
         else:
             print(agent_properties["name"])
@@ -67,7 +62,6 @@ def run_conversation(prompt: str, conversation: List[Dict[str, str]]) -> Tuple[s
                 system_message=agent_properties["system_message"],
                 stream=True,
             )
-            
             return response
         
     elif command == "/claude":

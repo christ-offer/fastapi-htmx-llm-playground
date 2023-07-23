@@ -18,11 +18,23 @@
     </nav>
     <section>
       <div class="chat-history">
-        <div class="empty-chat-container" id="empty-chat-container">
-          <p>Start a new chat by clicking the button above. </p>
-          
-        </div>
-        
+        {% for message in conversation %}
+          {% if message.role == "user" %}
+          <div class="message message-user">
+            <p class="icon">🧔</p> 
+            <div class="message-content">
+              {{ message.content | safe }}
+            </div>
+          </div>
+          {% else %}
+          <div class="message message-bot">
+            <p class="icon">🤖</p>
+            <div class="message-content">
+              {{ message.content | safe }}
+            </div>
+          </div>
+          {% endif %}
+        {% endfor %}
       </div>
       <div class="input-area">
         <div class="input-container">
@@ -68,27 +80,6 @@
     
     var textarea = document.getElementById('chat');
 
-    // Initialize the textarea as disabled
-    textarea.disabled = true;
-
-    // Create a new MutationObserver instance
-    var observer = new MutationObserver(function(mutations) {
-      mutations.forEach(function(mutation) {
-        if (mutation.addedNodes) {
-          mutation.addedNodes.forEach(function(node) {
-            if (node.nodeType === 1) { // ELEMENT_NODE
-              if (node.classList.contains('message')) {
-                textarea.disabled = false;
-                observer.disconnect(); // stop observing when we've found the element
-              }
-            }
-          });
-        }
-      });
-    });
-
-    // Start observing the document with the configured parameters
-    observer.observe(document.body, { childList: true, subtree: true });
     
     // Handler for textarea keypresses
     document.getElementById('chat').addEventListener('keydown', function(event) {
@@ -292,7 +283,6 @@ aside li {
   }
 }
 
-
 .history_title {
   font-family: 'Roboto', sans-serif !important;
   font-size: 16px !important;
@@ -301,6 +291,7 @@ aside li {
   cursor: pointer;
   padding: 0.5rem;
 }
+
 
 
 </style>
