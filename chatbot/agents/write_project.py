@@ -1,8 +1,8 @@
 from typing import List, Dict, Union
 import os
 
-from constants import PROJECTS_DIR
-from agents.file_write_agent import FileWriter
+from chatbot.constants import PROJECTS_DIR
+from chatbot.agents.file_write_agent import FileWriter
 
 
 

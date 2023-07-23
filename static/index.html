@@ -18,17 +18,21 @@
     </nav>
     <section>
       <div class="chat-history">
-        <div class="empty-chat-container">
-          <p>Start a new chat by clicking the button above.</p>
+        <div class="empty-chat-container" id="empty-chat-container">
+          <p>Start a new chat by clicking the button above. </p>
+          
         </div>
         
       </div>
       <div class="input-area">
         <div class="input-container">
-          <div id="spinner" class="htmx-indicator" src="spinner.svg">
-            Loading...
-          </div>
-          <textarea id="chat" name="chat" hx-post="/run_convo" hx-swap="beforeend" hx-target=".chat-history" hx-indicator="#spinner" hx-trigger="keyup.enter" placeholder="Please enter your prompt here"></textarea>  
+          <div class="lds-facebook htmx-indicator" id="spinner">
+            <div></div><div></div><div></div>
+            </div>  
+          
+          <textarea id="chat" name="chat" hx-post="/chat" hx-swap="beforeend" hx-target=".chat-history" hx-indicator="#spinner" hx-trigger="keyup.enter" placeholder="Please enter your prompt here">
+            
+          </textarea>  
           
         </div>
       </div>
@@ -38,9 +42,11 @@
       <div hx-get="/settings" class="settings" hx-target=".settings" hx-trigger="load" hx-swap="innerHTML">
         
       </div>
+      
     </aside>
   </body>
   <script>
+
     window.addEventListener('htmx:afterRequest', function(event) {
       if (event.detail.elt.tagName === 'BUTTON') {
         htmx.ajax('GET', '/get_history', {target:'.history', swap:'innerHTML'})
@@ -229,18 +235,63 @@ aside ul {
 aside li {
   margin-left: 0.25rem;
 }
-.htmx-indicator{
+.edit-name {
+  width: inherit;
+  padding: 0;
+  margin: 0;
+}
+.htmx-indicator {
     position:absolute;
     top:10px;
     right:10px;
-    bottom:0;
-    opacity:0;
-    transition: opacity 300ms ease-in-out;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
 }
-.htmx-request .htmx-indicator{
+.htmx-request .lds-facebook{
     opacity:1
 }
-.htmx-request.htmx-indicator{
+.htmx-request.lds-facebook{
     opacity:1
 }
+
+.lds-facebook {
+  height: 12px;
+  width: 12px;
+  position:absolute;
+  top:-8px;
+  right:75px;
+}
+.lds-facebook div {
+  display: inline-block;
+  position: absolute;
+  left: 8px;
+  width: 16px;
+  background: var(--accent-secondary);
+  animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+.lds-facebook div:nth-child(1) {
+  left: 8px;
+  animation-delay: -0.24s;
+}
+.lds-facebook div:nth-child(2) {
+  left: 32px;
+  animation-delay: -0.12s;
+}
+.lds-facebook div:nth-child(3) {
+  left: 56px;
+  animation-delay: 0;
+}
+@keyframes lds-facebook {
+  0% {
+    top: 8px;
+    height: 64px;
+  }
+  50%, 100% {
+    top: 24px;
+    height: 32px;
+  }
+}
+
+
+
 </style>

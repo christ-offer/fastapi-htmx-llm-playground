@@ -1,0 +1,17 @@
+<html>
+  <form hx-put="/update_history_name" hx-target=".history" hx-swap="innerHTML">
+    <input class="edit-name" type="text" name="new_name"  placeholder="{{convo_name}}">
+    <input style="display:none" class="edit-name" type="text" name="name" placeholder="{{convo_name}}" value="{{convo_name}}">
+    <button>
+      🗸
+    </button>
+</form>
+</html>
+<style>
+  form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>

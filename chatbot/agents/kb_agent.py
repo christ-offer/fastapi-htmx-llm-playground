@@ -1,32 +1,30 @@
 import os
 from typing import List, Dict, Union
-from agents.file_write_agent import FileWriter
-from utils import ensure_directory_exists
-from utils import is_valid_filename
-from constants import HISTORY_DIR
+from chatbot.agents.file_write_agent import FileWriter
+from chatbot.utils import ensure_directory_exists
+from chatbot.utils import is_valid_filename
+from chatbot.constants import KB_DIR
 
 file_writer = FileWriter()
 
-class HistoryHandler:
+class KnowledgebaseHandler:
     def __init__(
             self, model: str = "gpt-4-0613", 
-            temperature: float = 0.1, 
+            temperature: float = 0.2, 
             top_p: float = 1.0, 
             frequency_penalty: float = 0.0, 
-            presence_penalty: float = 0.0,
-            conversation = []
+            presence_penalty: float = 0.0
             ):
         self.model = model
         self.temperature = temperature
         self.top_p = top_p
         self.frequency_penalty = frequency_penalty
         self.presence_penalty = presence_penalty
-        self.conversation = conversation
-        self.function_params = self.history_params
-        self.system_message = """# History Agent
-You are responsible for handling the history.
+        self.function_params = self.knowledgebase_params
+        self.system_message = """# Knowledgebase Agent
+You are responsible for handling the knowledgebase.
 """
-        self.HISTORY_DIR = HISTORY_DIR
+        self.KB_DIR = KB_DIR
     
     @property
     def model(self):
@@ -67,7 +65,7 @@ You are responsible for handling the history.
     @presence_penalty.setter
     def presence_penalty(self, value):
         self._presence_penalty = value
-    
+        
     @property
     def system_message(self) -> str:
         return self._system_message
@@ -76,23 +74,23 @@ You are responsible for handling the history.
     def system_message(self, value):
         self._system_message = value
 
-    def write_history_entry(self, filename: str, content) -> str:
-        return file_writer.write_file(filename, content, directory=self.HISTORY_DIR)
+    def knowledgebase_create_entry(self, filename: str, content: str) -> str:
+        return file_writer.write_file(filename, content, directory=self.KB_DIR)
 
-    def list_history_entries(self) -> str:
-        ensure_directory_exists(self.HISTORY_DIR)
+    def knowledgebase_list_entries(self) -> str:
+        ensure_directory_exists(self.KB_DIR)
         try:
-            entries = os.listdir(self.HISTORY_DIR)
+            entries = os.listdir(self.KB_DIR)
             entries_str = '\n'.join(entries)
-            return f"The history contains the following entries:\n{entries_str}"
+            return f"The knowledgebase contains the following entries:\n{entries_str}"
         except Exception as e:
             return f"An error occurred while listing the entries: {str(e)}"
 
-    def read_history_entry(self, filename: str) -> str:
+    def knowledgebase_read_entry(self, filename: str) -> str:
         if not is_valid_filename(filename):
             return "The provided filename is not valid."
 
-        filepath = os.path.join(self.HISTORY_DIR, filename)
+        filepath = os.path.join(self.KB_DIR, filename)
 
         try:
             with open(filepath, 'r') as f:
@@ -102,11 +100,11 @@ You are responsible for handling the history.
             return f"An error occurred while reading the entry: {str(e)}"
 
     @property
-    def history_params(self) -> List[Dict[str, Union[str, Dict]]]:
+    def knowledgebase_params(self) -> List[Dict[str, Union[str, Dict]]]:
         return [
             {
-                "name": "write_history_entry",
-                "description": "Creates a new history entry",
+                "name": "knowledgebase_create_entry",
+                "description": "Creates a new knowledge base entry",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -117,8 +115,8 @@ You are responsible for handling the history.
                 },
             },
             {
-                "name": "read_history_entry",
-                "description": "Reads an existing history entry",
+                "name": "knowledgebase_read_entry",
+                "description": "Reads an existing knowledge base entry",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -128,8 +126,8 @@ You are responsible for handling the history.
                 },
             },
             {
-                "name": "list_history_entries",
-                "description": "Lists all entries in the history",
+                "name": "knowledgebase_list_entries",
+                "description": "Lists all entries in the knowledge base",
                 "parameters": {
                     "type": "object",
                     "properties": {},

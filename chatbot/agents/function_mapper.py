@@ -1,14 +1,14 @@
-from agents.csv_agent import CSVHandler
-from agents.python_agent import PythonRepl
-from agents.kb_agent import KnowledgebaseHandler
-from agents.history_agent import HistoryHandler
-from agents.file_write_agent import FileWriter
-from agents.scrape_agent import Scraper
-from agents.wikidata_agent import WikidataAgent
-from agents.image_agent import ImageAgent
-from agents.help_agent import HelpAgent
-from agents.write_project import ProjectWriter
-from system_messages.system import (
+from chatbot.agents.csv_agent import CSVHandler
+from chatbot.agents.python_agent import PythonRepl
+from chatbot.agents.kb_agent import KnowledgebaseHandler
+from chatbot.agents.history_agent import HistoryHandler
+from chatbot.agents.file_write_agent import FileWriter
+from chatbot.agents.scrape_agent import Scraper
+from chatbot.agents.wikidata_agent import WikidataAgent
+from chatbot.agents.image_agent import ImageAgent
+from chatbot.agents.help_agent import HelpAgent
+from chatbot.agents.write_project import ProjectWriter
+from chatbot.system_messages.system import (
     review_agent, 
     brainstorm_agent, 
     ticket_agent, 

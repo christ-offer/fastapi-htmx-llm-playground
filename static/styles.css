@@ -24,7 +24,6 @@ html {
   color: var(--text-primary);
   background-color: var(--background-primary);
 }
-
 button {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;

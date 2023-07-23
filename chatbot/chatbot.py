@@ -4,18 +4,18 @@ from typing import Dict, List, Tuple
 import re
 import time
 
-from tokenizer.tokens import calculate_cost, num_tokens_from_messages
-from system_messages.system import (
+from chatbot.tokenizer.tokens import calculate_cost, num_tokens_from_messages
+from chatbot.system_messages.system import (
     function_res_agent, 
     base_system_message,
     )
-from agents.function_mapper import FunctionMapper
-from agents.function_call_agent import FunctionCallAgent
-from agents.base_agent import RegularAgent
-from agents.function_response_agent import function_response_agent
-from agents.anthropic_base import AnthropicAgent
+from chatbot.agents.function_mapper import FunctionMapper
+from chatbot.agents.function_call_agent import FunctionCallAgent
+from chatbot.agents.base_agent import RegularAgent
+from chatbot.agents.function_response_agent import function_response_agent
+from chatbot.agents.anthropic_base import AnthropicAgent
 
-from constants import HISTORY_DIR
+from chatbot.constants import HISTORY_DIR
 function_mapper = FunctionMapper()
 fc = FunctionCallAgent()
 ra = RegularAgent()

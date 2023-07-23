@@ -1,9 +1,14 @@
 <html>
   {% for conversation in conversations %}
-    <li class="load_history_button">
-      <p hx-get="/load_history?name={{ conversation.name }}" hx-target=".chat-history" hx-swap="innerHTML">
+    <li class="load_history_button" class="{{conversation.name}}">
+      <p hx-get="/load_history?name={{ conversation.name }}" hx-target=".chat-history" hx-swap="innerHTML" class="history_title">
         {{ conversation.name }}  
       </p>
+      <!--
+      <span hx-post="/update_history_input?name={{ conversation.name }}" hx-target=".load_history_button" hx-swap="innerHTML">
+        &#9998;
+      </span>
+      -->
       <span hx-delete="/delete_history?name={{ conversation.name }}" hx-target=".history" hx-swap="innerHTML">
         &#128465;
       </span>

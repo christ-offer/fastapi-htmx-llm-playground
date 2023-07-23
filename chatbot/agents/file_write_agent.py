@@ -1,8 +1,8 @@
 from typing import List, Dict, Union
 import os
-from utils import ensure_directory_exists, is_valid_filename
+from chatbot.utils import ensure_directory_exists, is_valid_filename
 
-from constants import DATA_DIR
+from chatbot.constants import DATA_DIR
 
 class FileWriter:
     def __init__(
