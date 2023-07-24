@@ -1,6 +1,6 @@
 import uvicorn
 import dotenv
-from fastapi import FastAPI, Form, Request
+from fastapi import FastAPI, Form, Request, Response
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
@@ -106,7 +106,7 @@ async def new_chat(request: Request):
     conversations.append({"name": conversation_name, "conversation": conversation})
     #create_conversation(1, conversation_name)
     #add_message_to_conversation(1, 7, "assistant", "Hello! I am your Personal Assistant. Type /help to see the available commands and functions. ")
-    return templates.TemplateResponse("new_chat.html", {"request": request, "conversation": conversation})
+    return Response(headers={"HX-Redirect": f"/chat/{conversation_name}"})
 
 @app.get("/chat/{name}", response_class=HTMLResponse)
 async def read_conversation(request: Request, name: str = None):

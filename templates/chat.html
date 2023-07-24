@@ -41,24 +41,16 @@
           <div class="lds-facebook htmx-indicator" id="spinner">
             <div></div><div></div><div></div>
             </div>  
-          
-          <textarea id="chat" name="chat" hx-post="/chat" hx-swap="beforeend" hx-target=".chat-history" hx-indicator="#spinner" hx-trigger="keyup.enter" placeholder="Please enter your prompt here">
-            
-          </textarea>  
-          
+          <textarea id="chat" name="chat" hx-post="/chat" hx-swap="beforeend" hx-target=".chat-history" hx-indicator="#spinner" hx-trigger="keyup.enter" placeholder="Please enter your prompt here"></textarea>  
         </div>
       </div>
     </section>
     <aside>
       <h2>Usage:</h2>
-      <div hx-get="/settings" class="settings" hx-target=".settings" hx-trigger="load" hx-swap="innerHTML">
-        
-      </div>
-      
+      <div hx-get="/settings" class="settings" hx-target=".settings" hx-trigger="load" hx-swap="innerHTML"></div>
     </aside>
   </body>
   <script>
-
     window.addEventListener('htmx:afterRequest', function(event) {
       if (event.detail.elt.tagName === 'BUTTON') {
         htmx.ajax('GET', '/get_history', {target:'.history', swap:'innerHTML'})
@@ -69,7 +61,6 @@
         event.detail.elt.disabled = true;
       }
     });
-
     window.addEventListener('htmx:afterOnLoad', function(event) {
       if (event.detail.elt.tagName === 'TEXTAREA') {
         var textarea = event.detail.elt;
@@ -79,8 +70,6 @@
     });
     
     var textarea = document.getElementById('chat');
-
-    
     // Handler for textarea keypresses
     document.getElementById('chat').addEventListener('keydown', function(event) {
       if (event.key === 'Enter' && !event.shiftKey) {
