@@ -17,6 +17,12 @@ Chatbot built using Python - Served with FastAPI and HTMX
 * The UI is regular HTML but with HTMX for the dynamic parts.
 * Has both OpenAI and Anthropic models available
 
+## TODO
+- [ ] Add database for users and history
+- [ ] Add user auth
+- [ ] Add user preferences (api-keys, system messages, etc)
+- [ ] Get streaming to work. (the chatbot streams in cli atm, but not managed to get FastAPI/UI to stream yet)
+
 ## Functions
 
 * /help - lists all available commands
