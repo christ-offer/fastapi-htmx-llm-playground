@@ -51,9 +51,8 @@ Example Usecase: /read_file code.ts/py/rs/etc -> /review -> /edit_file code.ts/p
 
 * Create a .env file in the root of the project:
   - OPENAI_API_KEY=your-api-key
-  - PINECONE_API_KEY=your-api-key
   - ANTHROPIC_API_KEY=your-api-key
-  - PINECONE_ENVIRONMENT=your-environment
+  - SUPABASE_CONN=your-conn-string (pw included)
 * `pip install -r requirements.txt` to install dependencies
 * `python main.py` to run the chatbot
 
