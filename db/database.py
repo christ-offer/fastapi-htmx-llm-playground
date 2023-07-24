@@ -44,48 +44,48 @@ class Message(Base):
 
 Base.metadata.create_all(bind=engine)
 
-# Create functions for interacting with database
+def get_db_session():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 def create_user(username, password, email):
+    db = next(get_db_session())
     new_user = User(username=username, password=password, email=email)
-    session = SessionLocal()
-    session.add(new_user)
-    session.commit()
-    session.close()
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
     return new_user
 
 def login_user(username, password):
-    session = SessionLocal()
-    user = session.query(User).filter(User.username == username, User.password == password).first()
-    session.close()
+    db = next(get_db_session())
+    user = db.query(User).filter(User.username == username, User.password == password).first()
     return user
 
 def get_user_conversations(user_id):
-    session = SessionLocal()
-    conversations = session.query(Conversation).join(Message).filter(Message.user_id == user_id).all()
-    session.close()
+    db = next(get_db_session())
+    conversations = db.query(Conversation).filter(Conversation.user_id == user_id).all()
     return conversations
 
 def get_conversation_messages(conversation_id, user_id):
-    session = SessionLocal()
-    messages = session.query(Message).filter(Message.conversation_id == conversation_id, Message.user_id == user_id).all()
-    session.close()
+    db = next(get_db_session())
+    messages = db.query(Message).filter(Message.conversation_id == conversation_id, Message.user_id == user_id).all()
     return messages
 
 def create_conversation(user_id, name):
+    db = next(get_db_session())
     new_conversation = Conversation(user_id=user_id, name=name)
-    session = SessionLocal()
-    session.add(new_conversation)
-    session.commit()
-    session.close()
+    db.add(new_conversation)
+    db.commit()
+    db.refresh(new_conversation)
     return new_conversation
 
 def add_message_to_conversation(user_id, conversation_id, role, content):
-    # find the conversation with the matching id and user_id and add the message to it
-    session = SessionLocal()
-    conversation = session.query(Conversation).filter(Conversation.id == conversation_id, Conversation.user_id == user_id).first()
+    db = next(get_db_session())
     new_message = Message(user_id=user_id, conversation_id=conversation_id, role=role, content=content)
-    conversation.messages.append(new_message)
-    session.commit()
-    session.close()
+    db.add(new_message)
+    db.commit()
+    db.refresh(new_message)
     return new_message

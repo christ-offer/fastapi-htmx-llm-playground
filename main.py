@@ -1,4 +1,5 @@
 import uvicorn
+import dotenv
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -17,8 +18,11 @@ from chatbot.system_messages.system import (
 #    get_conversation_messages,
 #    create_conversation,
 #    add_message_to_conversation,
+#    login_user
 #)
 
+#envs = dotenv.dotenv_values(".env")
+#SECRET_KEY = envs["SECRET_KEY"]
 
 app = FastAPI(docs_url="/documentation", redoc_url=None)
 app.mount("/static", StaticFiles(directory="static"), name="static")
