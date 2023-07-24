@@ -144,19 +144,25 @@ async def run_convo_route(request: Request, chat: str = Form(...)):
     
     result = run_conversation(chat, conversation) 
     completed_conversation = ""
-    for chunk in result:
-        # the chunk can either have the key completion or choices
-        if "choices" in chunk:
-            if chunk.choices[0].finish_reason != "stop":
-                print(chunk.choices[0].delta.content)
-                completed_conversation += chunk.choices[0].delta.content
-                
-        elif "stop_reason" in chunk and chunk.stop_reason == None:
-            print(chunk.completion)
-            completed_conversation += chunk.completion
-        else:
-            print(chunk.completion)
-            completed_conversation += chunk.completion
+    # Check if result is iterable
+    
+    if isinstance(result, str):  # Result is returned as a string from one of the functions
+        completed_conversation = result
+    else:  # Result is a stream from OpenAI or Athropic Agents. Iterate through the stream
+        for chunk in result:
+            # the chunk can either have the key completion or choices depending on the API
+            if "choices" in chunk:
+                if chunk['choices'][0]['finish_reason'] != "stop":
+                    print(chunk['choices'][0]['delta']['content'])
+                    completed_conversation += chunk['choices'][0]['delta']['content']
+                    
+            elif "stop_reason" in chunk and chunk['stop_reason'] == None:
+                print(chunk['completion'])
+                completed_conversation += chunk['completion']
+            else:
+                print(chunk['completion'])
+                completed_conversation += chunk['completion']
+    
     #add_message_to_conversation(id, "user", chat)      
     conversation.append({
         "role": "user",
