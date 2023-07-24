@@ -28,12 +28,7 @@
     </aside>
   </body>
   <script>
-    window.addEventListener('htmx:afterRequest', function(event) {
-      if (event.detail.elt.tagName === 'BUTTON') {
-        htmx.ajax('GET', '/get_history', {target:'.history', swap:'innerHTML'})
-        
-      }
-    });
+    
   </script>
 </html>
 <style>

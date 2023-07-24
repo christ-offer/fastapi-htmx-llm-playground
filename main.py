@@ -1,13 +1,12 @@
 import uvicorn
 import dotenv
-from fastapi import FastAPI, Form, Request, Response
-from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
+from fastapi import FastAPI, Form, Request, Response, HTTPException
+from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 from starlette.requests import Request
-from pydantic import BaseModel
-from fastapi import HTTPException
 from starlette.status import HTTP_307_TEMPORARY_REDIRECT
+from pydantic import BaseModel
 from markdown import markdown
 from chatbot.chatbot import run_conversation
 from chatbot.system_messages.system import (
@@ -64,8 +63,7 @@ async def delete_conversation(request: Request, name: str = None):
         if convo['name'] == name:
             conversations.remove(convo)
             break
-    
-    return templates.TemplateResponse("chat_history.html", {"request": request, "conversations": conversations})
+    return Response(headers={"HX-Refresh": f"true"})
 
 @app.post("/update_history_input", response_class=HTMLResponse)
 async def update_conversation(request: Request, name: str = None):
