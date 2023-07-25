@@ -1,5 +1,5 @@
 <html>
 <div>
-  {{ help_html | safe }}
+  <div id="tabs" hx-get="/settings/usage" hx-trigger="load delay:100ms" hx-target="#tabs" hx-swap="innerHTML"></div>
 </div>
 </html>

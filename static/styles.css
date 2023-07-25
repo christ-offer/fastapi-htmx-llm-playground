@@ -24,6 +24,13 @@ html {
   color: var(--text-primary);
   background-color: var(--background-primary);
 }
+body {
+  display: grid;
+  grid-template-columns: 1fr 4fr 2fr;
+  height: 100%;
+  max-height: 100vh;
+  overflow-y: hidden;
+}
 button {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;

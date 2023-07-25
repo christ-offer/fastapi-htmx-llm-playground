@@ -1,19 +1,31 @@
 <html>
   <head>
+    <script src="https://unpkg.com/htmx.org@1.9.3"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="/static/code.css">
     <link rel="stylesheet" href="/static/styles.css">
-    <script src="https://unpkg.com/htmx.org@1.9.3"></script>
     <title>Chatbot</title>
   </head>
   <body>
     <nav>
       <header>
-        <button hx-get="/new_chat" hx-target=".chat-history" hx-swap="innerHTML">New Chat</button>
+        <button 
+          hx-get="/new_chat" 
+          hx-target=".chat-history" 
+          hx-swap="innerHTML"
+        >New Chat</button>
       </header>
       <main>
         <h4>Chat History</h4>
-        <ul class="history" name="get_history" hx-get="/get_history" hx-trigger="load" hx-target=".history" hx-swap="innerHTML">
-        </ul>
+        <ul 
+          class="history" 
+          name="get_history" 
+          hx-get="/get_history" 
+          hx-trigger="load" 
+          hx-target=".history" 
+          hx-swap="innerHTML"
+        ></ul>
       </main>
     </nav>
     <section>
@@ -40,37 +52,37 @@
         <div class="input-container">
           <div class="lds-facebook htmx-indicator" id="spinner">
             <div></div><div></div><div></div>
-            </div>  
-          <textarea id="chat" name="chat" hx-post="/chat" hx-swap="beforeend" hx-target=".chat-history" hx-indicator="#spinner" hx-trigger="keyup.enter" placeholder="Please enter your prompt here"></textarea>  
+          </div>
+          <textarea 
+            id="chat" 
+            name="chat" 
+            hx-post="/chat" 
+            hx-on::before-request="event.detail.elt.disabled = true"
+            hx-on::after-request="event.detail.elt.disabled = false"
+            hx-on::after-on-load="event.detail.elt.value = ''"
+            hx-on::after-swap="event.detail.elt.focus()"
+            hx-swap="beforeend" 
+            hx-target=".chat-history" 
+            hx-indicator="#spinner" 
+            hx-trigger="keyup.enter" 
+            placeholder="Please enter your prompt here"
+            autofocus
+          ></textarea>  
         </div>
       </div>
     </section>
     <aside>
-      <h2>Usage:</h2>
-      <div hx-get="/settings" class="settings" hx-target=".settings" hx-trigger="load" hx-swap="innerHTML"></div>
+      <div 
+        hx-get="/settings" 
+        class="settings" 
+        hx-target=".settings" 
+        hx-trigger="load" 
+        hx-swap="innerHTML"
+      ></div>
     </aside>
   </body>
   <script>
-    window.addEventListener('htmx:afterRequest', function(event) {
-      if (event.detail.elt.tagName === 'BUTTON') {
-        htmx.ajax('GET', '/get_history', {target:'.history', swap:'innerHTML'})
-      }
-    });
-    window.addEventListener('htmx:beforeRequest', function(event) {
-      if (event.detail.elt.tagName === 'TEXTAREA') {
-        event.detail.elt.disabled = true;
-      }
-    });
-    window.addEventListener('htmx:afterOnLoad', function(event) {
-      if (event.detail.elt.tagName === 'TEXTAREA') {
-        var textarea = event.detail.elt;
-        textarea.value = '';
-        textarea.disabled = false;
-      }
-    });
-    
     var textarea = document.getElementById('chat');
-    // Handler for textarea keypresses
     document.getElementById('chat').addEventListener('keydown', function(event) {
       if (event.key === 'Enter' && !event.shiftKey) {
         event.preventDefault(); // Prevent newline
@@ -111,22 +123,6 @@ nav ul li {
   background-color: var(--background-tertiary);
   border-radius: 5px;
 }
-.load_history_button {
-  font-size: 12px;
-  padding: 0;
-  display:flex;
-  justify-content: space-between;
-}
-.load_history_button p {
-  cursor: pointer;
-  padding: 0.5rem;
-}
-.load_history_button span {
-  cursor: pointer;
-  color: var(--error);
-  font-size: 16px;
-  padding: 0.5rem;
-}
 nav button {
   padding: 0.5rem;
   margin: 0.5rem;
@@ -138,19 +134,6 @@ nav button {
 section {
   display: grid;
   grid-template-rows: 1fr 100px;
-}
-.empty-chat-container {
-  height: 100%;
-  display: grid;
-  place-items: center;
- 
-}
-.empty-chat-container p {
-  text-align: center;
-  font-weight: 700;
-  font-size: 1.5rem;
-  max-width: 33ch;
-  color: var(--text-secondary);
 }
 aside {
   background-color: var(--background-secondary);
@@ -204,7 +187,6 @@ aside {
   position: relative;
 }
 aside .settings {
-  margin-top: 2rem;
   padding-inline: 1rem;
 }
 aside ul {
@@ -271,16 +253,5 @@ aside li {
     height: 32px;
   }
 }
-
-.history_title {
-  font-family: 'Roboto', sans-serif !important;
-  font-size: 16px !important;
-  line-height: 1.5 !important;
-  color: var(--text-primary) !important;
-  cursor: pointer;
-  padding: 0.5rem;
-}
-
-
 
 </style>

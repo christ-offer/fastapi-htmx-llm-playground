@@ -1,0 +1,24 @@
+<html>
+<div class="tab-list" role="tablist">
+	<button hx-get="/settings/usage" class="selected" role="tab" aria-selected="true" aria-controls="tab-content">Usage</button>
+	<button hx-get="/settings/settings" role="tab" aria-selected="false" aria-controls="tab-content">Settings</button>
+</div>
+
+<div id="tab-content" role="tabpanel" class="tab-content">
+	{{ usage_html | safe }}
+</div>
+</html>
+<style>
+.tab-list button {
+  padding-inline: 1rem;
+  padding-block: 0.5rem;
+  background-color: var(--background-primary);
+}
+.selected {
+  background-color: var(--background-tertiary) !important;
+}
+#tab-content {
+  padding: 1rem;
+  background-color: var(--background-secondary);
+}
+</style>

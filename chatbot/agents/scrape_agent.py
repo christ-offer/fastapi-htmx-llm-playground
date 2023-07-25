@@ -99,6 +99,7 @@ This agent scrapes a webpage and returns the result as a JSON string.
                 model="claude-2",
                 max_tokens_to_sample=1000000,
                 prompt=f"{HUMAN_PROMPT} Please provide a exhaustive and concise summary of the following (formatted nicely in markdown): {text} {AI_PROMPT}",
+                stream=False,
             )
             return completion.completion
         except requests.HTTPError as e:

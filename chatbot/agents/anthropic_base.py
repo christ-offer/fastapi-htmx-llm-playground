@@ -9,13 +9,14 @@ class AnthropicAgent:
             prompt: str = "",
             model: str = "claude-2",
             conversation: dict = [],
-            stream: bool = False,
+            stream: bool = True,
             max_tokens_to_sample: int = 1000000):
             
         self.model = model
         self.max_tokens_to_sample = max_tokens_to_sample
         self.prompt = prompt
         self.conversation = conversation
+        self.stream = stream
         load_dotenv()
         self.anthropic = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
     
@@ -42,8 +43,22 @@ class AnthropicAgent:
     @prompt.setter
     def prompt(self, value):
         self._prompt = value
+    
+    @property
+    def stream(self):
+        return self._stream
+    
+    @stream.setter
+    def stream(self, value):
+        self._stream = value
 
-    def call(self, prompt: str = "", model: str = "claude-2", stream: bool = True, max_tokens_to_sample: int = 1000000, conversation: dict = []):
+    def call(
+            self, 
+            prompt: str = "", 
+            model: str = "claude-2", 
+            stream: bool = True, 
+            max_tokens_to_sample: int = 1000000, 
+            conversation: dict = []):
         try:
             completion = self.anthropic.completions.create(
                 model=model,
@@ -51,7 +66,7 @@ class AnthropicAgent:
                 stream=stream,
                 prompt=f"Conversation history: {conversation} - {HUMAN_PROMPT} {prompt} {AI_PROMPT}",
             )
-            return completion
         except Exception as e:
             logging.error(f"Anthropic API call failed: {str(e)}")
             return "Anthropic API call failed due to an internal server error."
+        return completion
