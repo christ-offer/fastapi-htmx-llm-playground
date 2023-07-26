@@ -14,7 +14,7 @@ class RegularAgent:
             stream: bool = False,
             frequency_penalty: float = 0.0,
             presence_penalty: float = 0.0):
-            
+        
         self.model = model
         self.temperature = temperature
         self.top_p = top_p

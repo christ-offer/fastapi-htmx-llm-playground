@@ -77,30 +77,30 @@ NO PLACEHOLDERS
         self._presence_penalty = value
     
     def write_files(self, files: List[Dict[str, str]]) -> str:
-      try:
-          for file in files:
-              try:
-                  filename = file['filename']
-                  content = file['content']
-              except KeyError as e:
-                  raise ValueError(f"File dictionary missing key: {str(e)}")
+        try:
+            for file in files:
+                try:
+                    filename = file['filename']
+                    content = file['content']
+                except KeyError as e:
+                    raise ValueError(f"File dictionary missing key: {str(e)}")
 
-              # Get the directory part of the filename
-              sub_dirs, filename_only = os.path.split(filename)
+                # Get the directory part of the filename
+                sub_dirs, filename_only = os.path.split(filename)
 
-              # Join the root directory with the subdirectories
-              full_dir = os.path.join(PROJECTS_DIR, sub_dirs)
+                # Join the root directory with the subdirectories
+                full_dir = os.path.join(PROJECTS_DIR, sub_dirs)
 
-              # Create the directories if they don't exist
-              os.makedirs(full_dir, exist_ok=True)
+                # Create the directories if they don't exist
+                os.makedirs(full_dir, exist_ok=True)
 
-              self.file_writer.write_file(filename_only, content, directory=full_dir)
-          
-          return f"Files have been successfully written to {PROJECTS_DIR}."
-      
-      except Exception as e:
-          print(f"An error occurred while writing files: {str(e)}")
-          raise
+                self.file_writer.write_file(filename_only, content, directory=full_dir)
+            
+            return f"Files have been successfully written to {PROJECTS_DIR}."
+        
+        except Exception as e:
+            print(f"An error occurred while writing files: {str(e)}")
+            raise
 
     @property
     def write_files_params(self) -> List[Dict[str, Union[str, Dict]]]:

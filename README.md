@@ -66,6 +66,6 @@ Example Usecase: /read_file code.ts/py/rs/etc -> /review -> /edit_file code.ts/p
 ## Screenshots
 
 ### Chat UI
-![UI With Syntax Highlighting](screenshots/ui.png)
+![Code Review](screenshots/review.png)
 
 ![List Commands](screenshots/commands.png)
