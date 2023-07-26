@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/static/styles.css">
     <title>Chatbot</title>
   </head>
-  <body>
+  <body >
     <nav>
       <header>
         <button 
@@ -81,15 +81,54 @@
       ></div>
     </aside>
   </body>
-  <script>
-    var textarea = document.getElementById('chat');
-    document.getElementById('chat').addEventListener('keydown', function(event) {
-      if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault(); // Prevent newline
-        htmx.trigger(this, 'keyup.enter'); // Trigger htmx request
-      }
+<script>
+  var textarea = document.getElementById('chat');
+  document.getElementById('chat').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault(); // Prevent newline
+      htmx.trigger(this, 'keyup.enter'); // Trigger htmx request
+    }
+  });
+  const copyButtonLabel = "📋";
+
+    // create an observer instance
+  let observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.type == "childList") {
+          let blocks = document.querySelectorAll("pre");
+
+          blocks.forEach((block) => {
+            // only add button if browser supports Clipboard API and a button isn't already present
+            if (navigator.clipboard && !block.querySelector('button')) {
+              let button = document.createElement("button");
+              // give button class of copy-button
+              button.classList.add("copy-button");
+
+              button.innerText = copyButtonLabel;
+              block.appendChild(button);
+
+              button.addEventListener("click", async () => {
+                await copyCode(block);
+              });
+            }
+          });
+        }
+      });
     });
-  </script>
+
+  // configuration of the observer
+  let config = { childList: true, subtree: true };
+
+  // pass in the target node, as well as the observer options
+  observer.observe(document.body, config);
+
+  async function copyCode(block) {
+    let code = block.querySelector("code");
+    let text = code ? code.innerText : "";
+
+    await navigator.clipboard.writeText(text);
+  }
+</script>
 </html>
 <style>
 body {
@@ -253,5 +292,23 @@ aside li {
     height: 32px;
   }
 }
+.codehilite {
+  position: relative;
+}
 
+.copy-button {
+  background: #272822; 
+  position: absolute;
+  font-size: 1.5rem;
+  top: 5px;
+  right: 5px;
+}
+pre {
+  overflow: auto;
+  padding-bottom: 2rem;
+}
+code {
+  overflow: auto;
+  
+}
 </style>

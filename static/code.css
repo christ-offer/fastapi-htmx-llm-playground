@@ -1,6 +1,7 @@
 .codehilite .hll { background-color: #49483e }
 .codehilite  { 
   background: #272822; 
+  position: relative;
   color: #f8f8f2;
   font-size: 12px;
   font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
