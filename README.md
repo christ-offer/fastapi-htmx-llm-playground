@@ -10,34 +10,27 @@
 
 ## Description
 
-Chatbot built using Python - Served with FastAPI and HTMX
+FastAPI/HTMX Chatbot, for deploying to [Deta Space](https://deta.space/)
 
-* History is in practice in memory. (save to file with /save)
 * Requires usage of /commands to save on tokens from system messages and function params. /commands send the message to different agents based on the command with their specific system message and function params.
 * The UI is regular HTML but with HTMX for the dynamic parts.
 * Has both OpenAI and Anthropic models available
 
 ## TODO
-- [ ] Add database for users and history
+- [ x ] Add database for users and history (works on deta.space)
 - [ ] Add user auth
 - [ ] Add user preferences (api-keys, system messages, etc)
-- [ ] Get streaming to work. (the chatbot streams in cli atm, but not managed to get FastAPI/UI to stream yet)
 
 ## Functions
 
-* /help - lists all available commands
 * /csv - csv handler
 * /python - python interpreter
-* /kb - knowledge base handler [read, write, list]
-* /history - history handler [read, write, list] - Useful if you only want to summarize history
 * /write - file writer chooses between `data/`, `data/code/` and `data/code/projects` depending on what it's asked to write
 * /read - file reader
 * /edit - file editor (takes line range, text)
 * /wikidata - wikidata sparql handler
-* /image - image to text captioner
 * /scrape - web scraper 
 * /claude - Use anthropics model (100k token window)
-* /save 'filename' - saves entire conversation history to file in history folder
 
 ### Coding Assistant commands
 
@@ -55,17 +48,20 @@ Example Usecase: /read_file code.ts/py/rs/etc -> /review -> /edit_file code.ts/p
 
 ## Usage
 
+### Only local:
+
 * Create a .env file in the root of the project:
   - OPENAI_API_KEY=your-api-key
   - ANTHROPIC_API_KEY=your-api-key
-  - SUPABASE_CONN=your-conn-string (pw included)
 * `pip install -r requirements.txt` to install dependencies
 * `python main.py` to run the chatbot
 
+
+#### Deta.space
+
+[Read the docs](https://deta.space/docs/en)
 
 ## Screenshots
 
 ### Chat UI
 ![Code Review](screenshots/review.png)
-
-![List Commands](screenshots/commands.png)
