@@ -79,7 +79,6 @@ You call the help function and return the list of available commands.
 * /read - file reader
 * /edit - file editor
 * /wikidata - wikidata sparql handler
-* /image - image to text captioner
 * /scrape - web scraper
 * /review - performs a review of code following a strict response format
 * /brainstorm [n] - returns a list of n ideas for the topic following a strict response format
