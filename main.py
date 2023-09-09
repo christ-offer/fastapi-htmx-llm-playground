@@ -50,7 +50,7 @@ async def read_settings(request: Request):
 async def read_history(request: Request):
     res = db.fetch()
     conversations = res.items
-    # Continue fetching until "res.last" is None.
+
     while res.last:
         res = db.fetch(last=res.last)
         conversations += res.items  
@@ -77,7 +77,6 @@ async def update_conversation_input(request: Request, name: str = ""):
         if convo['key'] == name:
             print(convo)
             convo_name = convo['name']
-            #convo['conversation'] = conversation
             break
         
     return templates.TemplateResponse("input.html", {"request": request, "name": name, "convo_name": convo_name})
@@ -93,7 +92,6 @@ async def update_conversation(request: Request, name: str = Form(...), new_name:
                 {"name": new_name},
                 name,
             )
-            #convo['name'] = new_name
             print(convo['name'])
             break
         
@@ -106,8 +104,7 @@ async def new_chat(request: Request):
     conversations = res.items
     conversation_name = f"Conversation {len(conversations) + 1}"
     conversation_key = str(uuid.uuid4())
-    #conversations.append({"name": conversation_name, "conversation": conversation})
-    # use base
+
     db.put({"conversation": conversation, "name": conversation_name}, conversation_key)    
     
     return Response(headers={"HX-Redirect": f"/chat/{conversation_key}"})
@@ -144,8 +141,6 @@ async def read_conversation(request: Request, name: str = ""):
 @app.post("/chat", response_class=HTMLResponse)
 async def run_convo_route(request: Request, chat: str = Form(...), key: str = Form(...)):
     conversation = []
-    conversations = db.get("conversations")
-    print(key)
     result = run_conversation(chat, conversation) 
     completed_conversation = ""
     if isinstance(result, str):  # Result is returned as a string from one of the functions

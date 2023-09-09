@@ -17,3 +17,4 @@ starlette
 sse_starlette
 pydantic
 sqlalchemy
+deta~=1.2.0
