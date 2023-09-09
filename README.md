@@ -22,7 +22,7 @@ FastAPI/HTMX Chatbot, for deploying to [Deta Space](https://deta.space/)
 - [ ] Add user auth
 - [ ] Add user preferences (api-keys, system messages, etc)
 
-## Functions
+## Functions (most of these generally just work locally, not on deta space for now)
 
 * /csv - csv handler
 * /python - python interpreter
