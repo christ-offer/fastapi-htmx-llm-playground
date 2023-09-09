@@ -57,7 +57,7 @@ Example Usecase: /read_file code.ts/py/rs/etc -> /review -> /edit_file code.ts/p
 * `python main.py` to run the chatbot
 
 
-#### Deta.space
+### Deta.space
 
 [Read the docs](https://deta.space/docs/en)
 
