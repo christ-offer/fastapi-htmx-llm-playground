@@ -15,6 +15,7 @@ FastAPI/HTMX Chatbot, for deploying to [Deta Space](https://deta.space/)
 * Requires usage of /commands to save on tokens from system messages and function params. /commands send the message to different agents based on the command with their specific system message and function params.
 * The UI is regular HTML but with HTMX for the dynamic parts.
 * Has both OpenAI and Anthropic models available
+* Does _NOT_ have streamed responses, because it's a pain :D
 
 ## TODO
 - [x] Add database for users and history (works on deta.space)
