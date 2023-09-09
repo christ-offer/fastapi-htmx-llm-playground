@@ -17,7 +17,7 @@ FastAPI/HTMX Chatbot, for deploying to [Deta Space](https://deta.space/)
 * Has both OpenAI and Anthropic models available
 
 ## TODO
-- [ x ] Add database for users and history (works on deta.space)
+- [x] Add database for users and history (works on deta.space)
 - [ ] Add user auth
 - [ ] Add user preferences (api-keys, system messages, etc)
 
