@@ -5,7 +5,6 @@ from chatbot.agents.history_agent import HistoryHandler
 from chatbot.agents.file_write_agent import FileWriter
 from chatbot.agents.scrape_agent import Scraper
 from chatbot.agents.wikidata_agent import WikidataAgent
-from chatbot.agents.image_agent import ImageAgent
 from chatbot.agents.help_agent import HelpAgent
 from chatbot.agents.write_project import ProjectWriter
 from chatbot.system_messages.system import (
@@ -27,7 +26,6 @@ class FunctionMapper:
         self.file_handler = FileWriter()
         self.scraper = Scraper()
         self.wikidata_agent = WikidataAgent()
-        self.image_agent = ImageAgent()
         self.help_agent = HelpAgent()
         self.write_project = ProjectWriter()
         self.functions_that_append_to_conversation = {
@@ -55,7 +53,6 @@ class FunctionMapper:
             "edit_file": self.file_handler.edit_file,
             "wikidata_sparql_query": self.wikidata_agent.wikidata_sparql_query,
             "scrape_webpage": self.scraper.scrape_webpage,
-            "image_to_text": self.image_agent.image_to_text,
             "help": self.help_agent.help,
             "write_files": self.write_project.write_files,
         }
@@ -108,14 +105,6 @@ class FunctionMapper:
                     "function_params": self.scraper.scrape_params,
                     "is_function": True,
                     "command_length": len("/scrape")
-                },
-                "/image": {
-                    "name": "Image to Text Agent",
-                    "agent": self.image_agent,
-                    "system_message": self.image_agent.system_message,
-                    "function_params": self.image_agent.image_to_text_params,
-                    "is_function": True,
-                    "command_length": len("/image")
                 },
                 "/help": {
                     "name": "Help Agent",

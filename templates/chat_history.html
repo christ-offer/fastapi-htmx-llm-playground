@@ -1,15 +1,17 @@
 <html>
   {% for conversation in conversations %}
-    <li class="load_history_button" class="{{conversation.name}}">
-      <a class="history_title" href="/chat/{{conversation.name}}">{{conversation.name}}</a>
-      <!--
-      <span hx-post="/update_history_input?name={{ conversation.name }}" hx-target=".load_history_button" hx-swap="innerHTML">
-        &#9998;
-      </span>
-      -->
-      <span hx-delete="/delete_history?name={{ conversation.name }}" hx-target=".history" hx-swap="innerHTML">
-        &#128465;
-      </span>
+    <li class="load_history_button  test{{conversation['key']}}">
+      <a class="history_title" href="/chat/{{conversation['key']}}">{{conversation['name']}}</a>
+
+      <div>
+        <span hx-post="/update_history_input?name={{ conversation['key'] }}" hx-target=".test{{conversation['key']}}" hx-swap="innerHTML">
+          &#9998;
+        </span>
+
+        <span hx-delete="/delete_history?name={{conversation['key']}}" hx-target=".history" hx-swap="innerHTML">
+          &#128465;
+        </span>
+      </div>
     </li>
   {% endfor %}
 </html>

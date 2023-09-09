@@ -1,12 +1,12 @@
 openai
+pillow
+Jinja2
+python-multipart
 anthropic
 requests
 bs4
 markdown
 pandas
-torch
-open_clip_torch
-PIL
 pandas
 python-dotenv
 pinecone-client
@@ -14,5 +14,6 @@ tiktoken
 fastapi
 uvicorn
 starlette
+sse_starlette
 pydantic
 sqlalchemy

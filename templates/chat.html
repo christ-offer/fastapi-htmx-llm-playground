@@ -5,7 +5,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="/static/code.css">
     <link rel="stylesheet" href="/static/styles.css">
-    <title>Chatbot</title>
+    <title>{{key}}</title>
   </head>
   <body >
     <nav>
@@ -29,6 +29,9 @@
       </main>
     </nav>
     <section>
+      <div class="spinner htmx-indicator">
+        <div id="spinner"> </div>
+      </div>
       <div class="chat-history">
         {% for message in conversation %}
           {% if message.role == "user" %}
@@ -50,9 +53,11 @@
       </div>
       <div class="input-area">
         <div class="input-container">
+          <!--
           <div class="lds-facebook htmx-indicator" id="spinner">
             <div></div><div></div><div></div>
           </div>
+          -->
           <textarea 
             id="chat" 
             name="chat" 
@@ -63,8 +68,9 @@
             hx-on::after-swap="event.detail.elt.focus()"
             hx-swap="beforeend" 
             hx-target=".chat-history" 
-            hx-indicator="#spinner" 
+            hx-indicator=".spinner" 
             hx-trigger="keyup.enter" 
+            hx-vals='{"key": "{{key}}"}'
             placeholder="Please enter your prompt here"
             autofocus
           ></textarea>  
@@ -82,6 +88,7 @@
     </aside>
   </body>
 <script>
+  let coolio = "testkey"
   var textarea = document.getElementById('chat');
   document.getElementById('chat').addEventListener('keydown', function(event) {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -131,6 +138,49 @@
 </script>
 </html>
 <style>
+@keyframes spin {
+0% {
+  transform: rotate(0deg);
+  filter: hue-rotate(0deg) brightness(250%) blur(3px);
+  box-shadow: 0 0 20px #3498db;
+  border: 20px solid #f3f3f3;
+  border-top: 20px solid #3498db;
+}
+50% {
+  transform: rotate(900deg) scale(0.5);
+  filter: hue-rotate(180deg) brightness(50%) blur(5px);
+  box-shadow: 0 0 50px #3498db, 0 0 15px #3498db, 0 0 5px #3498db;
+  border: 12px solid #f3f3f3;
+  border-top: 12px solid #3498db;
+}
+100% {
+  transform: rotate(720deg);
+  filter: hue-rotate(360deg) brightness(250%) blur(3px);
+  box-shadow: 0 0 20px #3498db;
+  border: 20px solid #f3f3f3;
+  border-top: 20px solid #3498db;
+}
+}
+
+.spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  display: none;
+  background-color: black;
+  justify-content: center;
+  align-items: center;
+}
+
+#spinner {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  animation: spin 2s ease-in-out infinite;
+}
 body {
   display: grid;
   grid-template-columns: 1fr 4fr 2fr;
@@ -141,6 +191,7 @@ body {
 nav {
   background-color: var(--background-secondary);
   padding: 1rem;
+  height: 100vh;
 }
 nav header {
   display:flex;
@@ -173,6 +224,7 @@ nav button {
 section {
   display: grid;
   grid-template-rows: 1fr 100px;
+  position: relative;
 }
 aside {
   background-color: var(--background-secondary);
