@@ -22,7 +22,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 
-deta = Deta("a0ohMQUo8Lax_z8kkiPT5hkuLiv3Np2XELRrdVjy8KdpM")
+deta = Deta()
 db = deta.Base("conversations")
 
 
